@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+lycee.db
+.git/
+.env
+.env.example

@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% block title %}Connexion — LycéeConnect{% endblock %}
+{% block content %}<div class="login card">
+<h1>Espace numérique</h1><p class="muted">Connectez-vous avec vos identifiants établissement.</p>
+{% if error %}<div class="alert">{{ error }}</div>{% endif %}
+<form method="post"><label>Identifiant</label><input name="username" autocomplete="username" required>
+<label>Mot de passe</label><input name="password" type="password" autocomplete="current-password" required>
+<button>Se connecter</button></form>
+<p class="help">En cas de problème, contactez le secrétariat de votre établissement.</p>
+</div>{% endblock %}

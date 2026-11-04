@@ -1,0 +1,9 @@
+services:
+  lyceeconnect:
+    build: .
+    ports:
+      - "8080:5000"
+    environment:
+      FLAG: "${FLAG:?Définis FLAG dans le fichier .env}"
+      SECRET_KEY: "${SECRET_KEY:?Définis SECRET_KEY dans le fichier .env}"
+    restart: unless-stopped

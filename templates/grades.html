@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% block title %}Notes — LycéeConnect{% endblock %}
+{% block content %}<h1>Notes</h1><div class="card tablewrap"><table><thead><tr><th>Matière</th><th>Note</th><th>Coef.</th><th>Appréciation</th></tr></thead><tbody>
+{% for g in grades %}<tr><td>{{ g.subject }}</td><td><b>{{ g.grade }}</b></td><td>{{ g.coefficient }}</td><td>{{ g.comment }}</td></tr>{% endfor %}
+</tbody></table></div>{% endblock %}

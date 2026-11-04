@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% block title %}Actualités — LycéeConnect{% endblock %}
+{% block content %}
+<h1>Actualités du lycée</h1>
+<p class="muted">Informations publiées par l'établissement, la vie scolaire et les services techniques.</p>
+
+<div class="news-list">
+{% for item in news %}
+<article class="card news-full">
+  <div class="news-meta">{{ item.published_at }} · {{ item.category }}</div>
+  <h2>{{ item.title }}</h2>
+  <p>{{ item.body }}</p>
+</article>
+{% endfor %}
+</div>
+{% endblock %}

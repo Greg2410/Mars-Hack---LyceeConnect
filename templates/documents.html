@@ -1,0 +1,5 @@
+{% extends "base.html" %}{% block title %}Documents — LycéeConnect{% endblock %}
+{% block content %}<h1>Mes documents</h1><p class="muted">Documents personnels et ressources mises à disposition par l'établissement.</p>
+<div class="card tablewrap"><table><thead><tr><th>Document</th><th>Catégorie</th><th>Propriétaire</th><th></th></tr></thead><tbody>
+{% for d in documents %}<tr><td>{{ d.title }}</td><td>{{ d.category }}</td><td>{{ d.owner }}</td><td><a class="button" href="{{ url_for('document') }}?id={{ d.id }}">Consulter</a></td></tr>{% endfor %}
+</tbody></table></div>{% endblock %}

@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}LycéeConnect{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="topbar">
+  <div><strong>LycéeConnect</strong><span class="school">Lycée Jean-Moulin</span></div>
+  {% if user %}<div class="identity">{{ user.firstname }} {{ user.lastname }} · {{ user.class_name or user.role }}</div>{% endif %}
+</header>
+{% if user %}
+<nav class="nav">
+<a href="{{ url_for('dashboard') }}">Accueil</a>
+<a href="{{ url_for('timetable') }}">Emploi du temps</a>
+<a href="{{ url_for('grades') }}">Notes</a>
+<a href="{{ url_for('documents') }}">Documents</a>
+<a href="{{ url_for('news') }}">Actualités</a>
+<a href="{{ url_for('profile') }}">Profil</a>
+<a href="{{ url_for('logout') }}">Déconnexion</a>
+</nav>
+{% endif %}
+<main>{% block content %}{% endblock %}</main>
+<footer>Portail numérique du Lycée Jean-Moulin · Année scolaire 2026-2027</footer>
+</body></html>

@@ -1,0 +1,60 @@
+{% extends "base.html" %}{% block content %}
+<div class="notice">
+  <div class="notice-tag">CLUB INFORMATIQUE · MARS@HACK</div>
+  <h1>Défi de qualification</h1>
+  <p>Mme Durand propose aux élèves du club informatique d'enquêter sur l'incident LycéeConnect et de retrouver le <b>code de validation</b> associé au rapport final de sécurité.</p>
+  <p class="muted">Aucune attaque par mot de passe n'est nécessaire. Utilisez uniquement votre compte élève et les informations disponibles sur le portail.</p>
+</div>
+
+<h2>Bonjour {{ user.firstname }}</h2>
+<p class="muted">Espace élève — {{ user.class_name }}.</p>
+
+<div class="dashboard-layout">
+  <div>
+    <div class="grid">
+      <section class="card">
+        <h2>Prochains cours</h2>
+        <p><b>08:00</b> Mathématiques · B112</p>
+        <p><b>09:00</b> Anglais · A203</p>
+        <p><b>10:15</b> NSI · B204</p>
+        <a href="{{ url_for('timetable') }}">Voir l'emploi du temps →</a>
+      </section>
+      <section class="card">
+        <h2>Dernières notes</h2>
+        {% for g in grades %}
+        <p><b>{{ g.subject }}</b> <span class="badge">{{ g.grade }}</span></p>
+        {% endfor %}
+        <a href="{{ url_for('grades') }}">Voir toutes les notes →</a>
+      </section>
+      <section class="card">
+        <h2>Documents récents</h2>
+        {% for d in recent_docs %}<p>📄 {{ d.title }}</p>{% endfor %}
+        <a href="{{ url_for('documents') }}">Ouvrir mes documents →</a>
+      </section>
+      <section class="card">
+        <h2>Informations pratiques</h2>
+        <p><b>CDI</b><br><span class="muted">Fermeture vendredi matin pour inventaire.</span></p>
+        <p><b>Vie scolaire</b><br><span class="muted">Conseil de classe prévu le 26 novembre.</span></p>
+      </section>
+    </div>
+  </div>
+
+  <aside class="news-panel">
+    <div class="news-header">
+      <div>
+        <div class="eyebrow">FIL D'ACTUALITÉS</div>
+        <h2>Dernières informations</h2>
+      </div>
+      <a href="{{ url_for('news') }}">Tout voir</a>
+    </div>
+
+    {% for item in news %}
+    <article class="news-item">
+      <div class="news-meta">{{ item.published_at }} · {{ item.category }}</div>
+      <h3>{{ item.title }}</h3>
+      <p>{{ item.body }}</p>
+    </article>
+    {% endfor %}
+  </aside>
+</div>
+{% endblock %}

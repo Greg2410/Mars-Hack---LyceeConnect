@@ -1,0 +1,5 @@
+{% extends "base.html" %}{% block title %}Profil — LycéeConnect{% endblock %}
+{% block content %}<h1>Mon profil</h1><div class="card profile">
+<p><span>Nom</span><b>{{ user.lastname }}</b></p><p><span>Prénom</span><b>{{ user.firstname }}</b></p>
+<p><span>Statut</span><b>{{ user.role }}</b></p><p><span>Classe</span><b>{{ user.class_name }}</b></p>
+<p><span>Adresse électronique</span><b>{{ user.email }}</b></p></div>{% endblock %}
