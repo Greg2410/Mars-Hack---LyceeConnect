@@ -1,13 +1,6 @@
 {% extends "base.html" %}{% block content %}
-<div class="notice">
-  <div class="notice-tag">CLUB INFORMATIQUE · MARS@HACK</div>
-  <h1>Défi de qualification</h1>
-  <p>Mme Durand propose aux élèves du club informatique d'enquêter sur l'incident LycéeConnect et de retrouver le <b>code de validation</b> associé au rapport final de sécurité.</p>
-  <p class="muted">Aucune attaque par mot de passe n'est nécessaire. Utilisez uniquement votre compte élève et les informations disponibles sur le portail.</p>
-</div>
-
-<h2>Bonjour {{ user.firstname }}</h2>
-<p class="muted">Espace élève — {{ user.class_name }}.</p>
+<h1>Bonjour {{ user.firstname }}</h1>
+<p class="muted">Bienvenue sur votre espace personnel — {{ user.class_name }}.</p>
 
 <div class="dashboard-layout">
   <div>

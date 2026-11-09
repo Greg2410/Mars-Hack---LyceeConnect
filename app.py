@@ -30,6 +30,7 @@ def init_db():
     DROP TABLE IF EXISTS documents;
     DROP TABLE IF EXISTS grades;
     DROP TABLE IF EXISTS timetable;
+    DROP TABLE IF EXISTS news;
 
     CREATE TABLE users(
       id INTEGER PRIMARY KEY,
@@ -107,8 +108,8 @@ def init_db():
       (5840,"MAINT-5840","Compte-rendu maintenance B204","Intendance","Maintenance",
        "Intervention terminée en salle B204. Une anomalie de permissions sur LycéeConnect a été signalée à la direction.\n\nDossier de suivi : SEC-7314"),
 
-      (5193,"CLUB-5193","Club informatique — qualification Mars@Hack","Claire Durand","Activités",
-       "Réunion exceptionnelle du club informatique mercredi à 13 h en salle B204. Mme Durand présentera le défi de qualification Mars@Hack."),
+      (5193,"CLUB-5193","Atelier du club informatique — robotique","Claire Durand","Activités",
+       "Le club informatique se réunira mercredi à 13 h en salle B204 pour avancer sur son projet de robotique."),
 
       (4472,"CDI-4472","Inventaire annuel du CDI","CDI","Vie scolaire",
        "Le CDI sera fermé vendredi matin pour inventaire."),
@@ -154,10 +155,10 @@ def init_db():
     cur.executemany("INSERT INTO news(published_at,title,category,body) VALUES(?,?,?,?)", [
       ("19/10/2026 16:40","Maintenance terminée en salle B204","Maintenance",
        "L'intervention sur les postes de la salle B204 est terminée. Ticket matériel MAINT-8842 clôturé. Les cours de NSI reprendront normalement dès demain."),
-      ("18/10/2026 11:15","Incident sur LycéeConnect : suivi en cours","Informatique",
-       "Une anomalie de permissions a été observée sur le portail LycéeConnect. L'équipe technique a ouvert le dossier SEC-7314 et transmis les éléments à la direction. Aucun changement de mot de passe n'est demandé aux élèves."),
-      ("16/10/2026 09:20","Qualification Mars@Hack — club informatique","Vie du lycée",
-       "Le club informatique se réunira mercredi à 13 h en B204 pour une séance spéciale de préparation à Mars@Hack."),
+      ("18/10/2026 11:15","LycéeConnect : incident de consultation de documents","Informatique",
+       "Des difficultés d'affichage et de consultation de certains documents ont été signalées. Le service informatique suit cet incident sous la référence SEC-7314. Aucune intervention n'est nécessaire sur les comptes élèves."),
+      ("16/10/2026 09:20","Club informatique : reprise des ateliers","Vie du lycée",
+       "Les ateliers du club informatique reprennent mercredi à 13 h en salle B204. Les inscriptions sont toujours ouvertes."),
       ("14/10/2026 14:00","Examens blancs de décembre","Scolarité",
        "Le calendrier prévisionnel des examens blancs est disponible dans la rubrique Documents. Référence administrative EXAM-3148."),
       ("12/10/2026 08:30","Réunion parents-professeurs","Vie scolaire",
@@ -233,13 +234,7 @@ def document():
     guard = require_login()
     if guard: return guard
 
-    # Deux mécanismes de consultation existent dans le portail :
-    # - id : ancien identifiant numérique
-    # - ref : référence documentaire utilisée par l'administration
-    #
-    # VULNÉRABILITÉ INTENTIONNELLE :
-    # dans les deux cas, le serveur vérifie seulement l'authentification,
-    # jamais l'autorisation sur l'objet demandé.
+    # Compatibilité avec les liens historiques et les références documentaires.
     doc = None
     requested_by = None
 
@@ -275,9 +270,9 @@ def document():
 @app.route("/robots.txt")
 def robots():
     return (
-        "User-agent: *\\n"
-        "Disallow: /admin-console\\n"
-        "Disallow: /backup-2025\\n",
+        "User-agent: *\n"
+        "Disallow: /admin-console\n"
+        "Disallow: /backup-2025\n",
         200,
         {"Content-Type": "text/plain; charset=utf-8"}
     )

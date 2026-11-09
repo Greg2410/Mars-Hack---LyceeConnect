@@ -1,40 +1,49 @@
-# Write-up organisateur — LycéeConnect V7
+# Write-up organisateur — LycéeConnect V8
 
-## Configuration du flag
+## Intention narrative
 
-Le flag réel est exclusivement défini par l'organisateur dans `.env` :
+Le participant incarne **Lucas Martin**, un élève qui décide de chercher seul une faille sur le portail de son lycée.
 
-```dotenv
-FLAG=MARS{valeur_choisie_par_l_organisateur}
-```
+Il n'est sollicité ni par un enseignant, ni par le club informatique. Le défi n'est **pas affiché dans l'ENT** : il est fourni séparément dans `ENONCE-JOUEUR.md`.
 
-Il n'est pas présent dans le dépôt applicatif. Dans le rapport final, l'application affiche dynamiquement la valeur de la variable d'environnement `FLAG`.
+L'interface doit ressembler à un espace scolaire ordinaire. Le joueur doit choisir lui-même de consulter les actualités, d'observer les liens et de recouper les références.
 
-## Parcours attendu
+## Solution
 
-1. Connexion avec `eleve` / `rentree2026`.
-2. Observer le fonctionnement des documents et le lien permanent utilisant `?ref=`.
-3. Lire les actualités et relever `SEC-7314`.
-4. Accéder à `/document?ref=SEC-7314`.
-5. Examiner les trois références :
-   - `CFG-8820` : cul-de-sac ;
-   - `AUDIT-LC-2025-113` : ancien rapport avec un code expiré ;
-   - `DIR-2026-42` : bonne piste.
-6. `DIR-2026-42` révèle `AUDIT-LC-9287`.
-7. `/document?ref=AUDIT-LC-9287` affiche le flag configuré dans `.env`.
+1. Se connecter avec `eleve` / `rentree2026`.
+2. Consulter **Documents** puis ouvrir le certificat de Lucas : `/document?id=4821`.
+3. Remarquer le lien permanent en bas de la page : `/document?ref=SCOL-4821`.
+4. Examiner les **Actualités** et relever la référence d'incident `SEC-7314`.
+5. Tester `/document?ref=SEC-7314` : le compte élève accède à un rapport interne.
+6. Le rapport préliminaire présente trois références :
+   - `CFG-8820` : annexe technique sans secret ;
+   - `AUDIT-LC-2025-113` : ancien rapport contenant un **faux code expiré** ;
+   - `DIR-2026-42` : bordereau de transmission utile.
+7. Consulter `/document?ref=DIR-2026-42` et découvrir `AUDIT-LC-9287`.
+8. Ouvrir `/document?ref=AUDIT-LC-9287` pour lire le rapport confidentiel de la direction, dont le code de validation provient du `.env`.
 
 ## Fausses pistes
 
-- `/robots.txt` ;
-- `/admin-console` → 403 ;
-- `/backup-2025` ;
-- ancien audit 2025 ;
-- références techniques parasites.
+- `/robots.txt` renvoie vers `/admin-console` et `/backup-2025` ;
+- la console d'administration affiche un `403` réel, sans contournement nécessaire ;
+- l'archive 2025 contient un faux flag obsolète ;
+- les annonces mentionnent des références de maintenance et de scolarité sans lien avec l'audit final.
 
 ## Vulnérabilité
 
-La route `/document` vérifie l'authentification mais pas l'autorisation sur l'objet demandé.
+**IDOR / Broken Access Control**. L'application vérifie la connexion de Lucas, mais pas ses droits sur chaque document.
+
+Le flag réel n'est pas dans le dépôt. Il est injecté par la variable `FLAG` via `.env` au démarrage du conteneur.
+
+## Indices pour les lycéens
+
+1. Dans une enquête, une actualité administrative peut contenir une information utile.
+2. Un document comporte un numéro, mais également une référence. Observe les liens du portail.
+3. Le dossier `SEC-7314` est-il consultable de la même manière qu'un document ?
+4. Une annexe technique, un ancien audit et un bordereau de transmission n'ont pas la même utilité.
 
 ## Débrief
 
-L'identifiant ou la référence d'une ressource, même difficile à deviner, ne constitue pas un mécanisme d'autorisation.
+Le changement d'identifiants ou l'usage de références difficiles à deviner ne remplacent pas une vérification d'autorisation côté serveur.
+
+> Réservé à un environnement de challenge fictif ; ne pas tester un véritable ENT sans autorisation.

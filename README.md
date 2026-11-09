@@ -1,51 +1,64 @@
-# LycéeConnect — Incident de sécurité (V7)
+# LycéeConnect — Une curiosité mal placée (V8)
 
-Challenge Web d'initiation « débutant+ » pour Mars@Hack.
+Challenge Web Mars@Hack — **niveau lycéen / débutant+**.
+
+## Concept
+
+Lucas Martin, élève de Terminale, explore **de sa propre initiative** le portail LycéeConnect de son lycée. Après avoir aperçu une annonce faisant état d'un incident de consultation de documents, il soupçonne un problème de contrôle d'accès.
+
+Aucun professeur ne lui donne de mission. Le site reste un ENT scolaire ordinaire : notes, emploi du temps, documents, actualités, profil.
+
+L'énoncé destiné aux participants est disponible dans `ENONCE-JOUEUR.md`.
 
 ## Lancement
 
-Le vrai flag n'est plus stocké dans le code source ni dans `docker-compose.yml`.
-Il est injecté au lancement depuis `.env`.
+Le vrai flag est défini **uniquement par l'organisateur** dans le fichier `.env` (et non dans `app.py`, les templates ou `docker-compose.yml`).
 
-1. Ouvre le fichier `.env`.
-2. Renseigne ton flag :
+1. Ouvrir `.env`.
+2. Renseigner une valeur personnelle :
 
 ```dotenv
-FLAG=MARS{ton_flag_ici}
+FLAG=MARS{ton_flag_personnel}
 ```
 
-3. Lance le challenge :
+3. Démarrer :
 
 ```bash
 docker compose up --build -d
 ```
 
-4. Ouvre :
+4. Ouvrir `http://localhost:8080`.
 
-`http://localhost:8080`
+Si `.env` n'existe pas, copier `.env.example` vers `.env`, puis renseigner `FLAG` et une valeur aléatoire pour `SECRET_KEY`.
 
-### Compte joueur
+### Vérification après démarrage
 
-- Identifiant : `eleve`
+```bash
+python3 scripts/test_http.py --verbose
+```
+
+Ce script contrôle les routes, la connexion, le chemin IDOR, les leurres et l'accès au rapport final **sans afficher le flag réel**.
+
+
+### Identifiants du joueur
+
+- Utilisateur : `eleve`
 - Mot de passe : `rentree2026`
 
-## Important
+## Mécanique conservée
 
-- Ne distribue pas `.env` aux joueurs ou aux IA chargées de valider le challenge en black-box.
-- `.env` est ignoré par Git grâce à `.gitignore`.
-- L'application utilise désormais `os.environ["FLAG"]` : il n'existe aucun flag de secours dans `app.py`.
-- Docker Compose refuse de démarrer si `FLAG` ou `SECRET_KEY` sont absents ou vides.
+- Une vulnérabilité IDOR / Broken Access Control sur `/document`.
+- Identifiants numériques non séquentiels.
+- Références documentaires accessibles avec `?ref=`.
+- Une actualité technique évoquant `SEC-7314`.
+- Un rapport préliminaire avec trois références, dont deux impasses.
+- Un ancien rapport contenant un **faux flag expiré**.
+- Des fausses pistes dans `robots.txt`.
 
-## Validation recommandée
+## Validation avec d'autres IA
 
-Pour tester réellement la difficulté, donne uniquement :
+Distribuer uniquement l'énoncé, l'URL et les identifiants. **Ne pas fournir le dépôt**, le `.env` ou `WRITEUP-ORGANISATEUR.md` pour une validation en black-box.
 
-- l'URL du challenge ;
-- `eleve` / `rentree2026` ;
-- l'énoncé joueur.
+## Sécurité
 
-Ne fournis ni le code source, ni `.env`, ni le write-up organisateur.
-
-## Vulnérabilité pédagogique
-
-Broken Access Control / IDOR. Le portail est volontairement vulnérable et doit être déployé dans un environnement isolé.
+Application intentionnellement vulnérable et fictive. La déployer dans un environnement de CTF isolé uniquement.
